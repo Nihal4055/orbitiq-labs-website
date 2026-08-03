@@ -12,14 +12,14 @@ export function Hero() {
     <section id="top" className="relative flex min-h-screen items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-background" aria-hidden="true">
-        {/* Greek bust — the hero's centrepiece (parallax) - More subtle on mobile with blur and lower opacity */}
+        {/* Greek bust — the hero's centrepiece (parallax) - More visible on mobile with increased opacity */}
         <div ref={bustRef} className="parallax-layer absolute inset-y-[-8%] right-0 h-[116%] w-[78%]">
           <img
             src={bust}
             alt=""
             width={1280}
             height={1600}
-            className="h-full w-full object-contain object-right opacity-[0.25] contrast-[1.15] grayscale blur-sm md:opacity-[0.62] md:blur-none"
+            className="h-full w-full object-contain object-right opacity-[0.45] contrast-[1.15] grayscale blur-sm md:opacity-[0.62] md:blur-none"
             style={{
               maskImage:
                 "radial-gradient(ellipse 60% 85% at 86% 50%, black 20%, rgba(0,0,0,0.5) 60%, transparent 90%)",

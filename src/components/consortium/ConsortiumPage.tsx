@@ -403,9 +403,9 @@ function ResidencyHero() {
 
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6">
-      {/* Greek painting background with parallax - Subtle on mobile, more prominent on desktop */}
+      {/* Greek painting background with parallax - More visible on mobile with increased opacity */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-20 blur-[3px] md:opacity-100 md:blur-0"
+        className="pointer-events-none absolute inset-0 opacity-40 blur-[2px] md:opacity-100 md:blur-0"
         style={{ 
           transform: `translateY(${parallax}px) scale(1.1)`, 
           transition: "opacity 0.3s ease",
