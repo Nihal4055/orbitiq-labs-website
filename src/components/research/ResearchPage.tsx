@@ -665,8 +665,8 @@ function FromTheLabSection() {
         </Reveal>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[400px_1fr]">
-          {/* Left: Story List */}
-          <Reveal delay={120}>
+          {/* Left: Story List - Below video on mobile, left sidebar on desktop */}
+          <Reveal delay={120} className="order-2 lg:order-1">
             <div className="space-y-6">
               {LAB_STORIES.map((story, i) => (
                 <Link
@@ -690,8 +690,8 @@ function FromTheLabSection() {
             </div>
           </Reveal>
 
-          {/* Right: Featured Video */}
-          <Reveal delay={200}>
+          {/* Right: Featured Video - Full width on mobile, right side on desktop */}
+          <Reveal delay={200} className="order-1 lg:order-2">
             <div className="relative aspect-video overflow-hidden rounded-2xl border border-border/60 bg-surface/40">
               {!playingVideo ? (
                 <>
@@ -700,19 +700,20 @@ function FromTheLabSection() {
                     alt="CASML 2025 Conference Presentation"
                     className="h-full w-full object-cover"
                   />
-                  {/* Video play overlay */}
+                  {/* Video play overlay - smaller button on mobile, positioned lower */}
                   <button
                     onClick={() => setPlayingVideo(true)}
                     className="absolute inset-0 flex items-center justify-center bg-black/20 transition-all hover:bg-black/30"
                     aria-label="Play video"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/80 bg-white/10 backdrop-blur-sm transition-transform hover:scale-110">
-                      <div className="ml-0.5 h-0 w-0 border-y-[8px] border-l-[14px] border-y-transparent border-l-white" />
+                    {/* Small play button on mobile (bottom-right), larger on desktop (center) */}
+                    <div className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/80 bg-white/10 backdrop-blur-sm transition-transform hover:scale-110 md:static md:h-16 md:w-16">
+                      <div className="ml-0.5 h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-white md:border-y-[9px] md:border-l-[16px]" />
                     </div>
                   </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                    <span className="label-mono text-[9px] text-violet-400">Featured Talk · CASML 2025</span>
-                    <p className="font-display mt-1 text-lg font-light text-white">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6">
+                    <span className="label-mono text-[8px] text-violet-400 md:text-[9px]">Featured Talk · CASML 2025</span>
+                    <p className="font-display mt-1 text-sm font-light text-white md:text-lg">
                       A Geometric Analysis of Quantum-Inspired Local Tensor Regression
                     </p>
                   </div>
