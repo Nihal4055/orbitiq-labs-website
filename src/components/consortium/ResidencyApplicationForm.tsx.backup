@@ -1,0 +1,448 @@
+import { useState } from "react";
+import { X, DollarSign, Check, Sparkles, Upload, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+// Country codes for phone input
+const COUNTRY_CODES = [
+  { code: "+1", country: "US/CA" },
+  { code: "+44", country: "UK" },
+  { code: "+91", country: "IN" },
+  { code: "+86", country: "CN" },
+  { code: "+81", country: "JP" },
+  { code: "+49", country: "DE" },
+  { code: "+33", country: "FR" },
+  { code: "+61", country: "AU" },
+  { code: "+7", country: "RU" },
+  { code: "+82", country: "KR" },
+  { code: "+55", country: "BR" },
+  { code: "+27", country: "ZA" },
+  { code: "+234", country: "NG" },
+  { code: "+20", country: "EG" },
+  { code: "+92", country: "PK" },
+  { code: "+880", country: "BD" },
+  { code: "+977", country: "NP" },
+  { code: "+93", country: "AF" },
+  { code: "+233", country: "GH" },
+  { code: "+254", country: "KE" },
+];
+
+interface ResidencyApplicationFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+// Country pricing tiers based on economic status
+const COUNTRY_PRICING = {
+  tier1: { // Well-to-do countries - $150
+    price: 150,
+    originalPrice: 150,
+    countries: [
+      "United States", "United Kingdom", "Canada", "Australia", "Germany", 
+      "France", "Switzerland", "Norway", "Sweden", "Denmark", "Netherlands", 
+      "Belgium", "Austria", "Finland", "Iceland", "Ireland", "Luxembourg", 
+      "New Zealand", "Singapore", "Japan", "South Korea", "Israel", 
+      "United Arab Emirates", "Qatar", "Kuwait", "Saudi Arabia", "Bahrain"
+    ]
+  },
+  tier2: { // Developing countries - $65 (discounted from $150)
+    price: 65,
+    originalPrice: 150,
+    countries: [
+      "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", "Armenia", 
+      "Azerbaijan", "Bangladesh", "Belarus", "Benin", "Bhutan", "Bolivia", 
+      "Bosnia and Herzegovina", "Botswana", "Brazil", "Bulgaria", "Burkina Faso", 
+      "Burundi", "Cambodia", "Cameroon", "Central African Republic", "Chad", 
+      "China", "Colombia", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", 
+      "Czech Republic", "Democratic Republic of Congo", "Dominican Republic", 
+      "Ecuador", "Egypt", "El Salvador", "Eritrea", "Estonia", "Eswatini", 
+      "Ethiopia", "Fiji", "Gabon", "Gambia", "Georgia", "Ghana", "Greece", 
+      "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", 
+      "Hungary", "Indonesia", "Iran", "Iraq", "Ivory Coast", "Jamaica", "Jordan", 
+      "Kazakhstan", "Kenya", "Kosovo", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", 
+      "Lesotho", "Liberia", "Libya", "Lithuania", "Madagascar", "Malawi", 
+      "Malaysia", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", 
+      "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", 
+      "Nepal", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Pakistan", 
+      "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", 
+      "Poland", "Portugal", "Romania", "Russia", "Rwanda", "Senegal", "Serbia", 
+      "Sierra Leone", "Slovakia", "Slovenia", "Somalia", "South Africa", 
+      "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Syria", 
+      "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tunisia", 
+      "Turkey", "Turkmenistan", "Uganda", "Ukraine", "Uruguay", "Uzbekistan", 
+      "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+    ]
+  },
+  tier3: { // India - $50 (special pricing)
+    price: 50,
+    originalPrice: 150,
+    countries: ["India"]
+  }
+};
+
+// Flatten all countries for the dropdown
+const ALL_COUNTRIES = [
+  ...COUNTRY_PRICING.tier3.countries,
+  ...COUNTRY_PRICING.tier1.countries.sort(),
+  ...COUNTRY_PRICING.tier2.countries.sort(),
+].sort();
+
+function getPricingForCountry(country: string): { price: number; originalPrice: number; isDiscounted: boolean } {
+  if (COUNTRY_PRICING.tier3.countries.includes(country)) {
+    return { price: COUNTRY_PRICING.tier3.price, originalPrice: COUNTRY_PRICING.tier3.originalPrice, isDiscounted: true };
+  }
+  if (COUNTRY_PRICING.tier1.countries.includes(country)) {
+    return { price: COUNTRY_PRICING.tier1.price, originalPrice: COUNTRY_PRICING.tier1.originalPrice, isDiscounted: false };
+  }
+  if (COUNTRY_PRICING.tier2.countries.includes(country)) {
+    return { price: COUNTRY_PRICING.tier2.price, originalPrice: COUNTRY_PRICING.tier2.originalPrice, isDiscounted: true };
+  }
+  return { price: COUNTRY_PRICING.tier2.price, originalPrice: COUNTRY_PRICING.tier2.originalPrice, isDiscounted: true };
+}
+
+export function ResidencyApplicationForm({ isOpen, onClose }: ResidencyApplicationFormProps) {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    countryCode: "+1",
+    phone: "",
+    country: "",
+    education: "",
+    position: "",
+    scholarshipReason: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  if (!isOpen) return null;
+
+  const pricing = formData.country ? getPricingForCountry(formData.country) : null;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const pricingInfo = getPricingForCountry(formData.country);
+    
+    const subject = `Residency Application - ${formData.fullName}`;
+    const body = `
+OrbitIQ Labs Residency Application
+
+APPLICANT INFORMATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Full Name: ${formData.fullName}
+Email: ${formData.email}
+Phone: ${formData.countryCode} ${formData.phone}
+Country: ${formData.country}
+
+ACADEMIC & PROFESSIONAL:
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Educational Qualification: ${formData.education}
+Current Position: ${formData.position}
+
+PRICING:
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Program Fee: $${pricingInfo.price} USD${pricingInfo.isDiscounted ? ` (Standard: $${pricingInfo.originalPrice})` : ''}
+${formData.scholarshipReason ? `\nScholarship Request:\n${formData.scholarshipReason}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Note: This is a paid commitment as intensive cloud credits will be utilized. 
+Tool usage charges are waived for residency participants.
+
+DOCUMENTS REQUIRED:
+Please send your Resume and Research CV (optional) to support@orbitiqlabs.space
+    `.trim();
+
+    const mailtoLink = `mailto:support@orbitiqlabs.space?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    try {
+      window.location.href = mailtoLink;
+      setSubmitStatus("success");
+      setTimeout(() => {
+        onClose();
+        setSubmitStatus("idle");
+        setFormData({
+          fullName: "",
+          email: "",
+          countryCode: "+1",
+          phone: "",
+          country: "",
+          education: "",
+          position: "",
+          scholarshipReason: "",
+        });
+      }, 3000);
+    } catch (error) {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" 
+         style={{ backgroundColor: "oklch(0.08 0.002 265 / 0.95)", backdropFilter: "blur(12px)" }}>
+      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl shadow-[0_0_80px_-12px_oklch(0.6_0.16_265/0.25)]"
+           style={{ 
+             background: "linear-gradient(135deg, oklch(0.12 0.01 265) 0%, oklch(0.10 0.01 265) 100%)",
+             border: "1px solid oklch(0.25 0.02 265 / 0.4)"
+           }}>
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-20"
+               style={{ background: "radial-gradient(ellipse, oklch(0.65 0.18 265), transparent 70%)" }} />
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute right-6 top-6 z-10 rounded-full p-2.5 transition-all hover:scale-110"
+          style={{ 
+            background: "oklch(0.15 0.01 265)",
+            border: "1px solid oklch(0.25 0.02 265 / 0.5)"
+          }}
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" style={{ color: "oklch(0.7 0.05 265)" }} />
+        </button>
+
+        <div className="relative p-10">
+          {/* Header */}
+          <div className="mb-10">
+            <div className="flex items-center gap-2.5 mb-4">
+              <Sparkles className="h-4 w-4" style={{ color: "oklch(0.7 0.18 265)" }} />
+              <span className="mono text-xs uppercase tracking-[0.2em]" style={{ color: "oklch(0.7 0.18 265)" }}>
+                Residency Program Application
+              </span>
+            </div>
+            <h2 className="display text-4xl font-light tracking-tight mb-5" style={{ color: "oklch(0.95 0.01 265)" }}>
+              Join the Next Cohort
+            </h2>
+            
+            {/* Important Notice */}
+            <div className="rounded-2xl p-5"
+                 style={{ 
+                   background: "linear-gradient(135deg, oklch(0.25 0.15 88 / 0.08), oklch(0.22 0.12 88 / 0.05))",
+                   border: "1px solid oklch(0.45 0.14 88 / 0.25)"
+                 }}>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <div className="h-5 w-5 rounded-full flex items-center justify-center"
+                       style={{ background: "oklch(0.6 0.16 88 / 0.15)" }}>
+                    <Check className="h-3 w-3" style={{ color: "oklch(0.75 0.15 88)" }} />
+                  </div>
+                </div>
+                <p className="text-sm leading-relaxed" style={{ color: "oklch(0.75 0.05 265)" }}>
+                  <strong style={{ color: "oklch(0.75 0.15 88)" }}>Paid Commitment:</strong> This program requires intensive cloud compute resources. 
+                  Pricing varies by country for global accessibility. Tool charges are waived. Scholarships available for exceptional cases.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {submitStatus === "success" ? (
+            <div className="py-16 text-center">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
+                   style={{ 
+                     background: "oklch(0.7 0.18 265 / 0.15)",
+                     border: "2px solid oklch(0.7 0.18 265 / 0.4)"
+                   }}>
+                <Check className="h-10 w-10" style={{ color: "oklch(0.7 0.18 265)" }} />
+              </div>
+              <h3 className="display text-2xl font-light mb-3" style={{ color: "oklch(0.95 0.01 265)" }}>
+                Application Submitted!
+              </h3>
+              <p className="text-sm" style={{ color: "oklch(0.6 0.03 265)" }}>
+                We'll review your application and contact you within 3-5 business days.
+              </p>
+            </div>
+          ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Personal Information */}
+            <div className="space-y-6">
+              <h3 className="font-display text-lg font-light tracking-tight border-b border-border/40 pb-2">
+                Personal Information
+              </h3>
+
+              <div>
+                <label htmlFor="fullName" className="block text-sm font-medium mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                  placeholder="Dr. Jane Smith"
+                />
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                    placeholder="jane@university.edu"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="country" className="block text-sm font-medium mb-2">
+                  Country *
+                </label>
+                <select
+                  id="country"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                >
+                  <option value="">Select your country</option>
+                  {ALL_COUNTRIES.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+                {calculatedPrice && (
+                  <p className="mt-2 text-sm text-violet-400">
+                    Program Fee: <strong>${calculatedPrice} USD</strong>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Academic & Professional */}
+            <div className="space-y-6">
+              <h3 className="font-display text-lg font-light tracking-tight border-b border-border/40 pb-2">
+                Academic & Professional Background
+              </h3>
+
+              <div>
+                <label htmlFor="education" className="block text-sm font-medium mb-2">
+                  Educational Qualification *
+                </label>
+                <select
+                  id="education"
+                  name="education"
+                  value={formData.education}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                >
+                  <option value="">Select qualification</option>
+                  <option value="PhD">PhD / Doctorate</option>
+                  <option value="Masters">Master's Degree</option>
+                  <option value="Bachelors">Bachelor's Degree</option>
+                  <option value="Undergraduate">Undergraduate (In Progress)</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="position" className="block text-sm font-medium mb-2">
+                  Current Professional Position *
+                </label>
+                <input
+                  type="text"
+                  id="position"
+                  name="position"
+                  value={formData.position}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400"
+                  placeholder="e.g., Postdoctoral Researcher, PhD Candidate, Research Scientist"
+                />
+              </div>
+            </div>
+
+            {/* Scholarship */}
+            <div className="space-y-6">
+              <h3 className="font-display text-lg font-light tracking-tight border-b border-border/40 pb-2">
+                Scholarship Consideration (Optional)
+              </h3>
+
+              <div>
+                <label htmlFor="scholarshipReason" className="block text-sm font-medium mb-2">
+                  Request Scholarship / Financial Assistance
+                </label>
+                <textarea
+                  id="scholarshipReason"
+                  name="scholarshipReason"
+                  value={formData.scholarshipReason}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full rounded-lg border border-border/60 bg-surface/20 px-4 py-2.5 text-sm transition-colors focus:border-violet-400 focus:outline-none focus:ring-1 focus:ring-violet-400 resize-none"
+                  placeholder="Briefly describe your circumstances if you require financial assistance. Scholarships are available for exceptional cases demonstrating need."
+                />
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Leave blank if not applicable. All scholarship requests are reviewed confidentially.
+                </p>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex gap-3 pt-6 border-t border-border/40">
+              <Button
+                type="submit"
+                variant="solid"
+                size="lg"
+                className="flex-1"
+                disabled={isSubmitting || !calculatedPrice}
+              >
+                {isSubmitting ? "Submitting..." : `Submit Application${calculatedPrice ? ` ($${calculatedPrice})` : ""}`}
+              </Button>
+              <Button
+                type="button"
+                variant="wire"
+                size="lg"
+                onClick={onClose}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+            </div>
+
+            <p className="text-center text-xs text-muted-foreground">
+              By submitting, you acknowledge the program fee commitment and agree to our terms of participation.
+            </p>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
