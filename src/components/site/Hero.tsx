@@ -12,8 +12,8 @@ export function Hero() {
     <section id="top" className="relative flex min-h-screen items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-background" aria-hidden="true">
-        {/* Greek bust — the hero's centrepiece (parallax) */}
-        <div ref={bustRef} className="parallax-layer absolute inset-y-[-8%] right-0 h-[116%] w-[78%]">
+        {/* Greek bust — the hero's centrepiece (parallax) - Hidden on mobile, visible on larger screens */}
+        <div ref={bustRef} className="parallax-layer absolute inset-y-[-8%] right-0 h-[116%] w-[78%] hidden md:block">
           <img
             src={bust}
             alt=""
