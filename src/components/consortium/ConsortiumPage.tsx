@@ -403,20 +403,22 @@ function ResidencyHero() {
 
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6">
-      {/* Greek painting background with parallax - Hidden on mobile, visible on larger screens */}
+      {/* Greek painting background with parallax - Subtle on mobile, more prominent on desktop */}
       <div
-        className="pointer-events-none absolute inset-0 hidden md:block"
+        className="pointer-events-none absolute inset-0 opacity-20 blur-[3px] md:opacity-100 md:blur-0"
         style={{ 
           transform: `translateY(${parallax}px) scale(1.1)`, 
-          opacity: fade * 0.4,
-          transition: "opacity 0.3s ease"
+          transition: "opacity 0.3s ease",
         }}
       >
         <img 
           src="/paintings/greek-hero-bg.jpg" 
           alt="" 
           className="h-full w-full object-cover"
-          style={{ filter: "blur(2px)" }}
+          style={{ 
+            opacity: fade * 0.4,
+            filter: "blur(2px)"
+          }}
         />
       </div>
 
