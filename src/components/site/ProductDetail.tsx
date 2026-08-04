@@ -181,7 +181,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <Reveal delay={120}>
               <div className="mt-16 overflow-hidden rounded-3xl border border-border/40 bg-gradient-to-br from-surface/30 to-surface/10">
                 <img
-                  src="/paintings/morbius_benchmark_1png.png"
+                  src="/paintings/morbius_benchmark_1.png"
                   alt="Mean co-primary performance across platforms - Morbius leads with 89.8% in scientific quality"
                   className="w-full"
                 />

@@ -312,7 +312,7 @@ export function MorbiusPage() {
           <Reveal delay={120}>
             <div className="mt-16 overflow-hidden rounded-3xl border border-border/60 bg-surface/10">
               <img
-                src="/paintings/morbius_benchmark_1png.png"
+                src="/paintings/morbius_benchmark_1.png"
                 alt="Morbius benchmark performance comparison chart 1"
                 className="w-full"
               />
