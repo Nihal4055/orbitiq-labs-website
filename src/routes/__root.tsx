@@ -10,7 +10,6 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -37,9 +36,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -77,14 +73,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "OrbitIQ Labs - AI-Powered Infrastructure for Autonomous Discovery" },
+      { name: "description", content: "OrbitIQ Labs develops advanced AI systems for autonomous scientific research, including Aethel (general reasoning), Morbius (drug discovery), Parallax (market intelligence), and Prometheus (quantum finance)." },
+      { name: "author", content: "OrbitIQ Labs" },
+      { name: "keywords", content: "AI research, autonomous discovery, scientific AI, drug discovery AI, market intelligence, quantum finance, deep tech, foundation models" },
+      { property: "og:title", content: "OrbitIQ Labs - AI-Powered Infrastructure for Autonomous Discovery" },
+      { property: "og:description", content: "Advanced AI systems for autonomous scientific research, drug discovery, market intelligence, and quantum finance." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://orbitiqlabs.space" },
+      { property: "og:site_name", content: "OrbitIQ Labs" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "OrbitIQ Labs - AI-Powered Infrastructure for Autonomous Discovery" },
+      { name: "twitter:description", content: "Advanced AI systems for autonomous scientific research, drug discovery, market intelligence, and quantum finance." },
     ],
     links: [
       {

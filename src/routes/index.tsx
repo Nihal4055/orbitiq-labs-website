@@ -5,7 +5,6 @@ import { WhatWeDo, Problem } from "@/components/site/Statements";
 import { FeatureCards } from "@/components/site/FeatureCards";
 import { ProductShowcase } from "@/components/site/ProductShowcase";
 import { AethelShowcase } from "@/components/site/AethelShowcase";
-import { TrustStrip } from "@/components/site/TrustStrip";
 import { DataFoundation } from "@/components/site/DataFoundation";
 import { ResearchShowcase } from "@/components/site/ResearchShowcase";
 import { Solutions, WhoWeServe } from "@/components/site/Solutions";
@@ -45,7 +44,6 @@ function Index() {
       <FeatureCards />
       <ProductShowcase />
       <AethelShowcase />
-      <TrustStrip />
       <DataFoundation />
 
       {/* cinematic break — leads into the published research */}

@@ -46,7 +46,7 @@ const SLIDES: Slide[] = [
     type: "image",
     content: "Powered by AI",
     subtext: "Built by scientists who understand the craft",
-    image: "/paintings/nihal.png",
+    image: "/paintings/nihal.jpg",
   },
   {
     type: "quote",
