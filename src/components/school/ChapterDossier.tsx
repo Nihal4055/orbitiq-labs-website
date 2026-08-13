@@ -1,9 +1,17 @@
 /**
  * Chapter 6 — The Output / Dossier
  * 
- * Progressive reveal of 7 research artifacts.
- * Scroll-based reveal animation deferred to later phase.
+ * Progressive reveal of 7 research artifacts styled as dossier pages.
+ * Uses GSAP for staggered card reveals with paper-flip aesthetic.
  */
+
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const artifacts = [
   {
@@ -44,8 +52,50 @@ const artifacts = [
 ];
 
 export function ChapterDossier() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const artifactCards = sectionRef.current.querySelectorAll('[data-artifact]');
+
+    // Progressive reveal with rotateX (paper flip) + stagger
+    gsap.fromTo(
+      artifactCards,
+      { 
+        opacity: 0, 
+        rotateX: -20,
+        y: 30,
+        scale: 0.95
+      },
+      {
+        opacity: 1,
+        rotateX: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: artifactCards[0],
+          start: 'top 70%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+  }, [prefersReducedMotion]);
   return (
     <section 
+      ref={sectionRef}
       id="chapter-6" 
       data-chapter="dossier"
       className="relative min-h-screen border-t border-border py-32"
@@ -63,14 +113,15 @@ export function ChapterDossier() {
         </div>
 
         {/* Artifacts */}
-        <div className="space-y-8">
+        <div className="space-y-8" style={{ perspective: '1000px' }}>
           {artifacts.map((artifact) => (
             <div
               key={artifact.id}
               data-artifact={artifact.id}
               className="group relative rounded-2xl border border-border/60 bg-surface/20 p-8 transition-all hover:border-accent/40 hover:bg-surface/30"
               style={{
-                boxShadow: '0 4px 16px -4px oklch(0 0 0 / 0.3)'
+                boxShadow: '0 4px 16px -4px oklch(0 0 0 / 0.3)',
+                transformStyle: 'preserve-3d'
               }}
             >
               {/* Paper texture overlay */}

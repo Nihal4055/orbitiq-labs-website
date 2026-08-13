@@ -2,8 +2,16 @@
  * Chapter 8 — The People Layer / Review Network
  * 
  * Three mentorship modes + review network statement.
- * No named mentors yet (using "assembling network" default per SOP).
+ * Uses GSAP for simple scroll-triggered reveals.
  */
+
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const modes = [
   {
@@ -24,8 +32,61 @@ const modes = [
 ];
 
 export function ChapterReviewNetwork() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const modeCards = sectionRef.current.querySelectorAll('[data-mode]');
+    const networkStatement = sectionRef.current.querySelector('[data-network-statement]');
+
+    // Animate mode cards
+    gsap.fromTo(
+      modeCards,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: modeCards[0],
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    // Animate network statement
+    if (networkStatement) {
+      gsap.fromTo(
+        networkStatement,
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: networkStatement,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+  }, [prefersReducedMotion]);
   return (
     <section 
+      ref={sectionRef}
       id="chapter-8" 
       data-chapter="review-network"
       className="relative min-h-screen border-t border-border py-32"
@@ -47,6 +108,7 @@ export function ChapterReviewNetwork() {
           {modes.map((mode) => (
             <div
               key={mode.id}
+              data-mode
               className="rounded-xl border border-border/60 bg-surface/20 p-8"
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full border border-accent/40 bg-accent/10 font-mono text-sm text-accent">
@@ -63,7 +125,10 @@ export function ChapterReviewNetwork() {
         </div>
 
         {/* Review network statement */}
-        <div className="rounded-2xl border border-border/60 bg-surface/20 p-10 text-center">
+        <div 
+          data-network-statement
+          className="rounded-2xl border border-border/60 bg-surface/20 p-10 text-center"
+        >
           <p className="font-display text-xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-2xl">
             The School is assembling a review network across AI, infrastructure, climate technology,
             and scientific computing.
