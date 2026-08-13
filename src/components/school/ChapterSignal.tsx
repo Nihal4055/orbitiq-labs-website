@@ -2,12 +2,99 @@
  * Chapter 1 — The Signal
  * 
  * Full-viewport opening chapter with 3-stage reveal and knowledge network visualization.
- * Animation deferred to Chapter 4 completion.
+ * Uses GSAP for scroll-triggered fade-ins with stagger.
  */
 
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export function ChapterSignal() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const stages = sectionRef.current.querySelectorAll('[data-stage]');
+    const title = sectionRef.current.querySelector('[data-title]');
+    const ctas = sectionRef.current.querySelector('[data-ctas]');
+
+    // Animate stages sequentially on scroll into view
+    gsap.fromTo(
+      stages,
+      { opacity: 0, y: 40, filter: 'blur(8px)' },
+      {
+        opacity: 0.9,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 1.2,
+        stagger: 0.3,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top center',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    // Title appears after stages
+    if (title) {
+      gsap.fromTo(
+        title,
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          delay: 1.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top center',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+
+    // CTAs fade in last
+    if (ctas) {
+      gsap.fromTo(
+        ctas,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: 1.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top center',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+  }, [prefersReducedMotion]);
+
   return (
     <section 
+      ref={sectionRef}
       id="chapter-1" 
       data-chapter="signal"
       className="relative flex min-h-screen items-center justify-center overflow-hidden"
@@ -39,21 +126,30 @@ export function ChapterSignal() {
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
         {/* 3-stage reveal */}
         <div className="space-y-12">
-          <p className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl">
+          <p 
+            data-stage="1"
+            className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl"
+          >
             Every field begins with a question.
           </p>
           
-          <p className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl">
+          <p 
+            data-stage="2"
+            className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl"
+          >
             Most people are taught to search for answers.
           </p>
           
-          <p className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl">
+          <p 
+            data-stage="3"
+            className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-4xl"
+          >
             Researchers learn to notice what has not yet been asked.
           </p>
         </div>
 
         {/* Title */}
-        <div className="mt-20">
+        <div data-title className="mt-20">
           <h1 className="font-display text-5xl font-light leading-tight tracking-tight md:text-7xl">
             Welcome to OrbitIQ Labs
             <br />
@@ -62,7 +158,7 @@ export function ChapterSignal() {
         </div>
 
         {/* CTAs */}
-        <div className="mt-16 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+        <div data-ctas className="mt-16 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
           <a
             href="#chapter-4"
             className="group inline-flex items-center gap-2 rounded-full border border-accent bg-accent px-8 py-3 font-mono text-sm uppercase tracking-wider text-background transition-all hover:bg-accent/90 hover:shadow-lg"

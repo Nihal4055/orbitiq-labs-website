@@ -2,10 +2,16 @@
  * Chapter 3 — The Invitation
  * 
  * Background shift + 3-profile radial selector with keyboard-operable interaction.
- * Framer Motion interactions deferred to later phase.
+ * Uses GSAP for scroll-triggered fade-ins on intro/closing sections.
  */
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 type ProfileId = "explorer" | "builder" | "researcher";
 
@@ -43,6 +49,76 @@ const profiles: Profile[] = [
 
 export function ChapterInvitation() {
   const [selected, setSelected] = useState<ProfileId | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const intro = sectionRef.current.querySelector('[data-intro]');
+    const selector = sectionRef.current.querySelector('[data-selector]');
+    const closing = sectionRef.current.querySelector('[data-closing]');
+
+    if (intro) {
+      gsap.fromTo(
+        intro,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: intro,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+
+    if (selector) {
+      gsap.fromTo(
+        selector.querySelectorAll('[data-profile]'),
+        { opacity: 0, scale: 0.9 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: selector,
+            start: 'top 70%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+
+    if (closing) {
+      gsap.fromTo(
+        closing,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: closing,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+  }, [prefersReducedMotion]);
 
   const handleKeyDown = (e: React.KeyboardEvent, profileId: ProfileId, index: number) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -63,6 +139,7 @@ export function ChapterInvitation() {
 
   return (
     <section 
+      ref={sectionRef}
       id="chapter-3" 
       data-chapter="invitation"
       className="relative min-h-screen border-t border-border py-32"
@@ -73,7 +150,7 @@ export function ChapterInvitation() {
       <div className="mx-auto max-w-5xl px-6">
         
         {/* Intro */}
-        <div className="mb-20 text-center">
+        <div data-intro className="mb-20 text-center">
           <p className="font-display text-3xl font-light leading-relaxed tracking-tight text-foreground md:text-4xl">
             You do not need to arrive as a researcher.
             <br />
@@ -83,6 +160,7 @@ export function ChapterInvitation() {
 
         {/* Profile selector */}
         <div 
+          data-selector
           className="mb-16"
           role="radiogroup"
           aria-label="Choose your research profile"
@@ -91,6 +169,7 @@ export function ChapterInvitation() {
             {profiles.map((profile, index) => (
               <button
                 key={profile.id}
+                data-profile
                 id={`profile-${profile.id}`}
                 role="radio"
                 aria-checked={selected === profile.id}
@@ -140,7 +219,7 @@ export function ChapterInvitation() {
         )}
 
         {/* Closing statement */}
-        <div className="mt-20 text-center">
+        <div data-closing className="mt-20 text-center">
           <p className="font-display text-2xl font-light leading-relaxed tracking-tight text-foreground/90 md:text-3xl">
             The School is not for passive consumption.
             <br />

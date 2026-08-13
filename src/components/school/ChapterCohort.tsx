@@ -2,8 +2,16 @@
  * Chapter 5 — Inside a Cohort
  * 
  * Weekly rhythm timeline + simulated research log feed.
- * Horizontal scroll interactions deferred to later phase.
+ * Uses GSAP for staggered reveals of weekly cards and log entries.
  */
+
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const weeklyRhythm = [
   {
@@ -49,8 +57,60 @@ const sampleLogEntries = [
 ];
 
 export function ChapterCohort() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const weeklyCards = sectionRef.current.querySelectorAll('[data-weekly-card]');
+    const logEntries = sectionRef.current.querySelectorAll('[data-log-entry]');
+
+    // Animate weekly rhythm cards
+    gsap.fromTo(
+      weeklyCards,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: weeklyCards[0],
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    // Animate research log entries with typing effect feel
+    gsap.fromTo(
+      logEntries,
+      { opacity: 0, x: -20 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.6,
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: logEntries[0],
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+  }, [prefersReducedMotion]);
   return (
     <section 
+      ref={sectionRef}
       id="chapter-5" 
       data-chapter="cohort"
       className="relative min-h-screen border-t border-border py-32"
@@ -76,6 +136,7 @@ export function ChapterCohort() {
             {weeklyRhythm.map((item, i) => (
               <div
                 key={i}
+                data-weekly-card
                 className="rounded-xl border border-border/60 bg-surface/20 p-6 text-center"
               >
                 <div className="mb-3 font-mono text-xs uppercase tracking-wider text-accent">
@@ -112,7 +173,7 @@ export function ChapterCohort() {
             
             <div className="space-y-3 font-mono text-sm">
               {sampleLogEntries.map((entry, i) => (
-                <div key={i} className="flex gap-4">
+                <div key={i} data-log-entry className="flex gap-4">
                   <span className="text-muted-foreground">{entry.time}</span>
                   <span className="flex-1 text-foreground/90">{entry.entry}</span>
                 </div>
