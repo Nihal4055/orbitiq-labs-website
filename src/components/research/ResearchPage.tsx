@@ -28,21 +28,22 @@ const BREAKTHROUGHS: Breakthrough[] = [
   {
     id: "morbius",
     name: "Morbius",
-    tagline: "Autonomous scientific discovery across chemistry and materials science",
+    tagline: "The world's first autonomous scientific discovery system",
     description:
-      "An agentic AI system that formulates hypotheses, designs experiments, interprets results, and generates novel chemical insights autonomously. Operates across molecular dynamics, materials discovery, and drug design.",
+      "An AI co-scientist capable of autonomous scientific discovery and breakthrough generation. Unlike traditional research assistants, Morbius formulates novel hypotheses, designs experiments, analyzes data, and produces publication-ready outputs across any scientific domain. Proven capabilities in Quantum Machine Learning and Tsetlin Machines.",
     color: "oklch(0.75 0.15 290)",
     coverImage: "/paintings/breakthrough-morbius.jpg",
     capabilities: [
-      "Hypothesis generation from literature and experimental data",
-      "Automated experiment design and protocol generation",
-      "Real-time result interpretation with causal reasoning",
-      "Novel molecular candidate synthesis pathways",
+      "Autonomous hypothesis generation across 100+ papers simultaneously",
+      "Multi-hop knowledge synthesis with persistent institutional memory",
+      "Complete research lifecycle: literature → hypothesis → experiment → publication",
+      "326 pre-configured scientific workflows across 22 disciplines",
+      "Publication-ready outputs: papers, slides, posters, flashcards, podcasts",
     ],
     metrics: [
-      { label: "Discovery Success Rate", value: "43%" },
-      { label: "Avg. Experiment Cycles", value: "12.4" },
-      { label: "Domains Covered", value: "3" },
+      { label: "Scientific Workflows", value: "326" },
+      { label: "Disciplines Covered", value: "22" },
+      { label: "File Formats", value: "60+" },
     ],
   },
   {

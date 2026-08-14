@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SchoolOfResearchPage } from "@/components/school/SchoolOfResearchPage";
+import { ConsortiumPage } from "@/components/consortium/ConsortiumPage";
 
 export const Route = createFileRoute("/consortium")({
   head: () => ({
     meta: [
-      { title: "OrbitIQ Labs — School of Research" },
-      { name: "description", content: "A structured research program teaching the full investigative loop — from question to validated output. Built around Morbius, Prometheus, and Parallax research systems." },
-      { property: "og:title", content: "OrbitIQ Labs — School of Research" },
-      { property: "og:description", content: "Learn to investigate. Operate in the research loop. Produce work that can be examined." },
+      { title: "Page Not Available" },
+      { name: "description", content: "This page is not currently available." },
+      { name: "robots", content: "noindex, nofollow" },
+      { property: "og:title", content: "OrbitIQ Labs" },
       { property: "og:type", content: "website" },
     ],
   }),
@@ -15,5 +15,24 @@ export const Route = createFileRoute("/consortium")({
 });
 
 function ConsortiumRoute() {
-  return <SchoolOfResearchPage />;
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          Page Not Available
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This page is not currently available.
+        </p>
+        <div className="mt-6">
+          <a
+            href="/"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Go home
+          </a>
+        </div>
+      </div>
+    </div>
+  );
 }

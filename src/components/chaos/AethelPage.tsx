@@ -120,19 +120,20 @@ function AethelHero() {
             </Reveal>
             <Reveal delay={120}>
               <h1 className="font-display mt-2 text-[clamp(3rem,8vw,6rem)] font-light leading-[0.9] tracking-[-0.04em]">
-                Aethel
+                Project Aethel
               </h1>
             </Reveal>
             <Reveal delay={200}>
               <p className="mt-5 text-xl font-light leading-snug">
-                A foundation model built to reason like a scientist.
+                A foundation model being built to reason like a scientist.
               </p>
             </Reveal>
             <Reveal delay={280}>
               <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
-                Mixture-of-Experts architecture with native multimodal fluency across molecular structures,
-                biological sequences, crystallographic data, and scientific imaging. Built to operate
-                in an iterative research loop, not answer single-shot questions.
+                Architecture design complete, training in progress. A Mixture-of-Experts foundation model 
+                with native multimodal fluency across molecular structures, biological sequences, 
+                crystallographic data, and scientific imaging—designed to operate in iterative research loops, 
+                not answer single-shot questions.
               </p>
             </Reveal>
             <Reveal delay={360}>

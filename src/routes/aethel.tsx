@@ -4,9 +4,9 @@ import { AethelPage } from "@/components/chaos/AethelPage";
 export const Route = createFileRoute("/aethel")({
   head: () => ({
     meta: [
-      { title: "Aethel — A Foundation Model Built to Reason Like a Scientist" },
-      { name: "description", content: "A foundation model for scientific reasoning across chemistry, materials science, biology, earth sciences, and mathematics. Mixture-of-Experts architecture with native multimodal fluency." },
-      { property: "og:title", content: "Aethel — OrbitIQ Labs" },
+      { title: "Project Aethel — Foundation Model Under Development" },
+      { name: "description", content: "Architecture and research plan for a scientific reasoning foundation model. Mixture-of-Experts design across chemistry, materials science, biology, earth sciences, and mathematics. Currently in development." },
+      { property: "og:title", content: "Project Aethel — OrbitIQ Labs" },
       { property: "og:type", content: "website" },
     ],
   }),

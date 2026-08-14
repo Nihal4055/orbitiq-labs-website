@@ -19,7 +19,6 @@ const links: NavLink[] = [
     ]
   },
   { label: "Aethel", to: "/aethel" },
-  { label: "Residency", to: "/consortium" },
   { label: "Systems", hash: "systems" },
   { label: "Data", hash: "data" },
   { label: "Research", to: "/research" },

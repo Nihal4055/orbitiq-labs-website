@@ -38,33 +38,29 @@ export function MorbiusPage() {
 
           <Reveal delay={160}>
             <p className="mt-6 max-w-3xl text-2xl font-light leading-snug text-muted-foreground">
-              An agentic AI system that formulates hypotheses, designs experiments, interprets
-              results, and generates novel chemical insights — autonomously.
+              The world's first autonomous scientific discovery system. An AI co-scientist that formulates novel hypotheses, designs experiments, and produces publication-ready outputs.
             </p>
           </Reveal>
 
           <Reveal delay={200}>
             <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-              Morbius operates across molecular dynamics, materials discovery, and drug design. It
-              doesn't just predict properties or screen candidates — it generates research
-              strategies, designs multi-step experimental protocols, and reasons causally about
-              chemical mechanisms.
+              Unlike traditional research assistants, Morbius doesn't just answer questions—it generates testable hypotheses, designs experimental protocols, analyzes results, and creates publication-ready content across any scientific domain. Already proven in cutting-edge fields including Quantum Machine Learning and Tsetlin Machines.
             </p>
           </Reveal>
 
           <Reveal delay={240}>
             <div className="mt-10 flex flex-wrap gap-6">
               <div>
-                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">43%</p>
-                <p className="label-mono mt-1">Discovery Success Rate</p>
+                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">326</p>
+                <p className="label-mono mt-1">Scientific Workflows</p>
               </div>
               <div>
-                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">12.4</p>
-                <p className="label-mono mt-1">Avg. Experiment Cycles</p>
+                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">22</p>
+                <p className="label-mono mt-1">Disciplines</p>
               </div>
               <div>
-                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">3</p>
-                <p className="label-mono mt-1">Scientific Domains</p>
+                <p className="font-display text-4xl font-light text-[oklch(0.75_0.15_290)]">60+</p>
+                <p className="label-mono mt-1">File Formats</p>
               </div>
             </div>
           </Reveal>
@@ -92,7 +88,7 @@ export function MorbiusPage() {
           <Reveal>
             <div className="flex items-center gap-4">
               <span className="rule-ornament w-12" />
-              <h2 className="font-display text-2xl font-light tracking-tight">Core Capabilities</h2>
+              <h2 className="font-display text-2xl font-light tracking-tight">Autonomous Discovery Pipeline</h2>
             </div>
           </Reveal>
 
@@ -102,14 +98,11 @@ export function MorbiusPage() {
                 <div className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.75_0.15_290)]" />
                   <h3 className="font-display text-xl font-light tracking-tight">
-                    Hypothesis Generation
+                    Autonomous Hypothesis Generation
                   </h3>
                 </div>
                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                  Extracts causal mechanisms from literature and experimental data to generate
-                  testable hypotheses. Reasons over molecular structure-property relationships,
-                  reaction pathways, and materials phase diagrams to identify unexplored regions of
-                  chemical space.
+                  Identifies research gaps across 100+ papers simultaneously through advanced knowledge graph reasoning. Generates testable hypotheses grounded in current literature. Connects insights across disciplines—biology ↔ materials science ↔ machine learning. Proposes experimental designs and validation protocols.
                 </p>
               </div>
             </Reveal>
@@ -119,14 +112,11 @@ export function MorbiusPage() {
                 <div className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.75_0.15_290)]" />
                   <h3 className="font-display text-xl font-light tracking-tight">
-                    Experiment Design
+                    Multi-Hop Knowledge Synthesis
                   </h3>
                 </div>
                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                  Generates detailed experimental protocols including reagent selection, reaction
-                  conditions, characterization methods, and control experiments. Optimizes
-                  experimental sequences to maximize information gain while minimizing resource
-                  consumption.
+                  Advanced RAG with LightRAG architecture. Cross-domain reasoning discovers patterns invisible to single-paper analysis. Persistent institutional knowledge graph that compounds over time. Context window supporting 50-500 papers per query.
                 </p>
               </div>
             </Reveal>
@@ -136,14 +126,11 @@ export function MorbiusPage() {
                 <div className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.75_0.15_290)]" />
                   <h3 className="font-display text-xl font-light tracking-tight">
-                    Result Interpretation
+                    Specialized Research Agents
                   </h3>
                 </div>
                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                  Analyzes experimental outcomes in real-time, identifying successful candidates,
-                  unexpected behaviors, and causal factors. Integrates spectroscopic data,
-                  crystallographic structures, and computational predictions to build mechanistic
-                  understanding.
+                  Five autonomous agents: Literature Synthesis, Methodology Design, Data Analysis, Gap Identification, and Hypothesis Ranking. Each agent prioritizes ideas by feasibility, impact, and novelty across the complete research pipeline.
                 </p>
               </div>
             </Reveal>
@@ -153,14 +140,11 @@ export function MorbiusPage() {
                 <div className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.75_0.15_290)]" />
                   <h3 className="font-display text-xl font-light tracking-tight">
-                    Iterative Refinement
+                    326 Scientific Workflows
                   </h3>
                 </div>
                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                  Operates in closed-loop research cycles: hypothesis → experiment → observation →
-                  revised hypothesis. Maintains coherent research strategies across 20+ experimental
-                  iterations, learning from both successes and failures to guide subsequent
-                  exploration.
+                  Pre-configured research workflows spanning 22 disciplines: Biology, Chemistry, Materials Science, Physics, Quantum Computing, Machine Learning, Quantitative Finance, Clinical Research, and 14+ additional domains. Years of domain expertise encoded.
                 </p>
               </div>
             </Reveal>
@@ -168,38 +152,50 @@ export function MorbiusPage() {
         </div>
       </section>
 
-      {/* Research Domains */}
+      {/* Research Studio & Content Pipeline */}
       <section className="border-b border-border py-28 lg:py-40">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <Reveal>
             <div className="flex items-center gap-4">
               <span className="rule-ornament w-12" />
-              <h2 className="font-display text-2xl font-light tracking-tight">Research Domains</h2>
+              <h2 className="font-display text-2xl font-light tracking-tight">Research Studio: Complete Content Pipeline</h2>
             </div>
           </Reveal>
 
           <div className="mt-12 grid gap-10 lg:grid-cols-3">
             {[
               {
-                title: "Drug Discovery",
-                desc: "Multi-objective optimization of molecular properties: potency, selectivity, ADMET, synthesizability. Adaptive objective discovery that identifies relevant optimization criteria during the search process rather than fixing them a priori.",
+                title: "Summary Generator",
+                desc: "Executive summaries optimized for rapid comprehension. Key findings extraction with citation linking. Methodology and results distillation. Configurable depth from abstract-level to technical deep-dive.",
               },
               {
-                title: "Materials Science",
-                desc: "Discovery of novel catalysts, energy storage materials, and functional polymers. Reasons over crystal structures, electronic band diagrams, and phase stability to identify promising compositions and synthesis routes.",
+                title: "Slide Deck Generator",
+                desc: "Powered by Paper2Slides (industry-benchmark open-source). Automatic extraction of figures, tables, and key equations. Professional academic layouts, conference-ready. Publication-quality PDF export.",
               },
               {
-                title: "Reaction Mechanism Elucidation",
-                desc: "Combines spectroscopic evidence, kinetic data, and computational chemistry to construct mechanistic hypotheses for complex chemical transformations. Designs isotope labeling and trapping experiments to validate proposed pathways.",
+                title: "Poster Generator",
+                desc: "Conference poster layouts with figure placement optimization. A0/A1 standard sizes with proper DPI for print. Automatic visual hierarchy and typography. Export to PDF, PNG, or editable formats.",
               },
-            ].map((domain, i) => (
-              <Reveal key={domain.title} delay={i * 80}>
+              {
+                title: "Flashcard Generator",
+                desc: "Spaced repetition-optimized study cards. Concept definitions, equations, and key results. Interactive web-based review interface. Export to Anki, Quizlet, or standalone formats.",
+              },
+              {
+                title: "Podcast Generator",
+                desc: "Natural conversational audio summaries of research papers. Multi-voice dialogue format (host + expert discussion). Configurable episode length and technical depth. MP3 export for mobile learning.",
+              },
+              {
+                title: "60+ Scientific Formats",
+                desc: "PDB, CIF, SDF/MOL (molecular), DICOM, NIfTI (medical), AnnData (genomics), HDF5, NetCDF (climate), MATLAB/NPY arrays, and 40+ additional domain-specific formats. Morbius understands structure, not just raw data.",
+              },
+            ].map((feature, i) => (
+              <Reveal key={feature.title} delay={i * 80}>
                 <div>
                   <h4 className="font-display text-lg font-light tracking-tight">
-                    {domain.title}
+                    {feature.title}
                   </h4>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {domain.desc}
+                    {feature.desc}
                   </p>
                 </div>
               </Reveal>

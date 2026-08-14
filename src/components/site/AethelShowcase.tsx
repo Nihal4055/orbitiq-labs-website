@@ -28,7 +28,7 @@ export function AethelShowcase() {
             <div>
               <div className="flex items-center gap-3">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
-                <span className="label-mono text-violet-400">Ongoing Research</span>
+                <span className="label-mono text-violet-400">Under Development</span>
               </div>
 
               <p className="mt-6 font-display text-xs italic tracking-wide text-muted-foreground">
@@ -36,27 +36,27 @@ export function AethelShowcase() {
               </p>
               
               <h3 className="font-display mt-2 text-[clamp(2.4rem,4.5vw,3.6rem)] font-light leading-[0.95] tracking-[-0.03em]">
-                Aethel
+                Project Aethel
               </h3>
               
               <p className="mt-4 text-lg font-light leading-snug">
-                A foundation model built to reason like a scientist.
+                A foundation model being built to reason like a scientist.
               </p>
               
               <p className="mt-5 max-w-md leading-relaxed text-muted-foreground">
-                Mixture-of-Experts architecture with native fluency across molecular structures, 
-                biological sequences, crystallographic data, and scientific imaging. Built to operate 
-                in an iterative research loop, not answer single-shot questions.
+                Architecture and training design complete. A Mixture-of-Experts foundation model 
+                with native fluency across molecular structures, biological sequences, crystallographic 
+                data, and scientific imaging—designed to operate in iterative research loops.
               </p>
 
               <ul className="mt-7 space-y-2.5">
                 <li className="flex items-start gap-3 text-sm text-muted-foreground">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
-                  ~1 trillion parameter class, ~22B active per query
+                  ~1 trillion parameter class (architecture designed, training in progress)
                 </li>
                 <li className="flex items-start gap-3 text-sm text-muted-foreground">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
-                  Chemistry, materials science, biology, earth sciences, mathematics
+                  5 scientific domains: chemistry, materials, biology, earth sciences, mathematics
                 </li>
                 <li className="flex items-start gap-3 text-sm text-muted-foreground">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
@@ -66,12 +66,8 @@ export function AethelShowcase() {
 
               <div className="mt-8 flex gap-8">
                 <div>
-                  <p className="font-display text-2xl font-light text-violet-400">5</p>
-                  <p className="label-mono mt-0.5">Scientific Domains</p>
-                </div>
-                <div>
-                  <p className="font-display text-2xl font-light text-violet-400">6</p>
-                  <p className="label-mono mt-0.5">Modalities</p>
+                  <p className="font-display text-2xl font-light text-violet-400">Q2 2027</p>
+                  <p className="label-mono mt-0.5">Expected Release</p>
                 </div>
               </div>
 
@@ -79,7 +75,7 @@ export function AethelShowcase() {
                 to="/aethel"
                 className="group mt-9 inline-flex items-center gap-2 rounded-full border border-violet-400/40 px-6 py-3 font-mono text-[11px] uppercase tracking-widest text-violet-400 transition-all hover:gap-3 hover:border-violet-400/60"
               >
-                Technical Details
+                Architecture & Research Plan
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
