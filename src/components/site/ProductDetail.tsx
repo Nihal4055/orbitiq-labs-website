@@ -5,6 +5,7 @@ import { SiteNav } from "./SiteNav";
 import { SiteFooter } from "./SiteFooter";
 import { AgentTerminal } from "./AgentTerminal";
 import { FeaturePanel, ChipCloud, ClosingCTA } from "./FeaturePanel";
+import { DiscoveryLoop } from "./DiscoveryLoop";
 import { Reveal } from "./Reveal";
 import { PRODUCTS, type Product } from "./products";
 import { MorbiusAccessForm } from "./MorbiusAccessForm";
@@ -13,7 +14,6 @@ export function ProductDetail({ product }: { product: Product }) {
   const C = product.colorVar;
   const [showAccessForm, setShowAccessForm] = useState(false);
   const [showDemoForm, setShowDemoForm] = useState(false);
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,31 +62,52 @@ export function ProductDetail({ product }: { product: Product }) {
                   {product.greek}
                 </p>
               </Reveal>
-              <Reveal delay={120}>
-                <h1 className="font-display mt-2 text-[clamp(3rem,8vw,6rem)] leading-[0.9] font-light tracking-[-0.04em]">
-                  {product.name}
-                </h1>
-              </Reveal>
-              <Reveal delay={200}>
-                <p className="mt-5 text-xl font-light leading-snug">{product.tagline}</p>
-              </Reveal>
-              <Reveal delay={280}>
-                <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">{product.body}</p>
-              </Reveal>
+              {product.headline ? (
+                <>
+                  {/* Positioning-led hero: the claim is the H1, the product
+                      name reads as the wordmark above it. */}
+                  <Reveal delay={120}>
+                    <p
+                      className="font-display mt-1 text-[clamp(2rem,3.6vw,2.9rem)] leading-[1] font-light tracking-[-0.03em]"
+                      style={{ color: C }}
+                    >
+                      {product.name}
+                    </p>
+                  </Reveal>
+                  <Reveal delay={180}>
+                    <h1 className="font-display mt-5 text-[clamp(2.1rem,4.6vw,3.5rem)] leading-[1.05] font-light tracking-[-0.03em]">
+                      {product.headline}
+                    </h1>
+                  </Reveal>
+                  <Reveal delay={260}>
+                    <p className="mt-6 max-w-xl leading-relaxed text-muted-foreground">
+                      {product.subheadline ?? product.body}
+                    </p>
+                  </Reveal>
+                </>
+              ) : (
+                <>
+                  <Reveal delay={120}>
+                    <h1 className="font-display mt-2 text-[clamp(3rem,8vw,6rem)] leading-[0.9] font-light tracking-[-0.04em]">
+                      {product.name}
+                    </h1>
+                  </Reveal>
+                  <Reveal delay={200}>
+                    <p className="mt-5 text-xl font-light leading-snug">{product.tagline}</p>
+                  </Reveal>
+                  <Reveal delay={280}>
+                    <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
+                      {product.body}
+                    </p>
+                  </Reveal>
+                </>
+              )}
               <Reveal delay={360}>
                 <div className="mt-10 flex flex-wrap gap-4">
-                  <Button 
-                    variant="solid" 
-                    size="xl"
-                    onClick={() => setShowAccessForm(true)}
-                  >
+                  <Button variant="solid" size="xl" onClick={() => setShowAccessForm(true)}>
                     {product.live ? `Try ${product.name} Desktop →` : "Join the Beta Waitlist"}
                   </Button>
-                  <Button 
-                    variant="wire" 
-                    size="xl"
-                    onClick={() => setShowDemoForm(true)}
-                  >
+                  <Button variant="wire" size="xl" onClick={() => setShowDemoForm(true)}>
                     Book an Institutional Demo
                   </Button>
                 </div>
@@ -96,9 +117,15 @@ export function ProductDetail({ product }: { product: Product }) {
             <Reveal delay={220}>
               <div
                 className="rounded-2xl p-1"
-                style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${C} 24%, transparent), transparent 55%)` }}
+                style={{
+                  background: `linear-gradient(135deg, color-mix(in oklab, ${C} 24%, transparent), transparent 55%)`,
+                }}
               >
-                <AgentTerminal sessions={product.sessions} color={C} label={`${product.slug} · agent session`} />
+                <AgentTerminal
+                  sessions={product.sessions}
+                  color={C}
+                  label={`${product.slug} · agent session`}
+                />
               </div>
             </Reveal>
           </div>
@@ -119,36 +146,51 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
       </section>
 
-      {/* Features */}
+      {/* The research loop — or, for products without one, a flat feature list */}
       <section className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        {product.features.map((f, i) => (
-          <FeaturePanel
-            key={f.title}
-            index={i + 1}
-            title={f.title}
-            body={f.body}
-            visual={<ChipCloud color={C} items={f.chips} />}
-            flip={i % 2 === 1}
+        {product.stages ? (
+          <DiscoveryLoop
+            stages={product.stages}
+            color={C}
+            header={product.loopHeader ?? `How ${product.name} Works`}
+            intro={product.loopIntro}
           />
-        ))}
+        ) : (
+          product.features?.map((f, i) => (
+            <FeaturePanel
+              key={f.title}
+              index={i + 1}
+              title={f.title}
+              body={f.body}
+              visual={<ChipCloud color={C} items={f.chips} />}
+              flip={i % 2 === 1}
+            />
+          ))
+        )}
+
+        {/* Differentiation — sits between the loop and the benchmarks */}
+        {product.differentiator && (
+          <Reveal>
+            <div className="border-t border-border/50 py-16 lg:py-20">
+              <p
+                className="max-w-3xl text-[clamp(1.05rem,1.5vw,1.3rem)] leading-relaxed font-light"
+                style={{ borderLeft: `2px solid ${C}`, paddingLeft: "1.75rem" }}
+              >
+                {product.differentiator}
+              </p>
+            </div>
+          </Reveal>
+        )}
 
         <ClosingCTA
           color={C}
           line={product.closing}
           cta={
             <>
-              <Button 
-                variant="solid" 
-                size="xl"
-                onClick={() => setShowAccessForm(true)}
-              >
+              <Button variant="solid" size="xl" onClick={() => setShowAccessForm(true)}>
                 {product.live ? `Try ${product.name} Desktop Free →` : "Request Early Access"}
               </Button>
-              <Button 
-                variant="wire" 
-                size="xl"
-                onClick={() => setShowDemoForm(true)}
-              >
+              <Button variant="wire" size="xl" onClick={() => setShowDemoForm(true)}>
                 Request Institutional Demo
               </Button>
             </>
@@ -164,16 +206,17 @@ export function ProductDetail({ product }: { product: Product }) {
               <div className="flex items-center gap-4">
                 <span className="rule-ornament w-12" style={{ background: C }} />
                 <h2 className="font-display text-2xl font-light tracking-tight">
-                  Performance Benchmarks
+                  Autonomy, Measured
                 </h2>
               </div>
             </Reveal>
 
             <Reveal delay={80}>
               <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-                Morbius demonstrates state-of-the-art performance across multiple drug discovery benchmarks, 
-                consistently outperforming traditional methods and competing AI systems in scientific quality, 
-                research execution, and overall discovery success rates.
+                This is the same autonomous engine benchmarked below against other AI research
+                platforms. Across 20 research prompts, Morbius was scored on two co-primary outcomes
+                — scientific quality and research execution — alongside the Claude Science Platform
+                and Biomni Lab.
               </p>
             </Reveal>
 
@@ -190,8 +233,8 @@ export function ProductDetail({ product }: { product: Product }) {
 
             <Reveal delay={160}>
               <p className="mt-4 text-center text-sm text-muted-foreground">
-                <strong style={{ color: C }}>Chart A:</strong> Mean co-primary performance across 20 prompts. 
-                Co-primary means include 95% bootstrap CIs; diamonds mark means.
+                <strong style={{ color: C }}>Chart A:</strong> Mean co-primary performance across 20
+                prompts. Co-primary means include 95% bootstrap CIs; diamonds mark means.
               </p>
             </Reveal>
 
@@ -207,7 +250,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     />
                   </div>
                   <p className="mt-4 text-center text-sm text-muted-foreground">
-                    <strong style={{ color: C }}>Chart B:</strong> Secondary composite distribution. 
+                    <strong style={{ color: C }}>Chart B:</strong> Secondary composite distribution.
                     Morbius achieves median score of 80.6/100.
                   </p>
                 </div>
@@ -223,8 +266,8 @@ export function ProductDetail({ product }: { product: Product }) {
                     />
                   </div>
                   <p className="mt-4 text-center text-sm text-muted-foreground">
-                    <strong style={{ color: C }}>Chart C:</strong> First-place finishes by co-primary outcome. 
-                    Morbius leads with 36 total wins.
+                    <strong style={{ color: C }}>Chart C:</strong> First-place finishes by
+                    co-primary outcome. Morbius leads with 36 total wins.
                   </p>
                 </div>
               </Reveal>
@@ -233,14 +276,16 @@ export function ProductDetail({ product }: { product: Product }) {
             {/* Key Performance Highlights */}
             <Reveal delay={280}>
               <div className="mt-20 grid gap-6 md:grid-cols-3">
-                <div 
+                <div
                   className="rounded-2xl border p-8 backdrop-blur-sm"
-                  style={{ 
+                  style={{
                     borderColor: `color-mix(in oklab, ${C} 20%, transparent)`,
-                    background: `color-mix(in oklab, ${C} 5%, transparent)`
+                    background: `color-mix(in oklab, ${C} 5%, transparent)`,
                   }}
                 >
-                  <p className="label-mono" style={{ color: C }}>Scientific Quality</p>
+                  <p className="label-mono" style={{ color: C }}>
+                    Scientific Quality
+                  </p>
                   <p className="font-display mt-2 text-4xl font-light" style={{ color: C }}>
                     89.8%
                   </p>
@@ -249,14 +294,16 @@ export function ProductDetail({ product }: { product: Product }) {
                   </p>
                 </div>
 
-                <div 
+                <div
                   className="rounded-2xl border p-8 backdrop-blur-sm"
-                  style={{ 
+                  style={{
                     borderColor: `color-mix(in oklab, ${C} 20%, transparent)`,
-                    background: `color-mix(in oklab, ${C} 5%, transparent)`
+                    background: `color-mix(in oklab, ${C} 5%, transparent)`,
                   }}
                 >
-                  <p className="label-mono" style={{ color: C }}>First-Place Wins</p>
+                  <p className="label-mono" style={{ color: C }}>
+                    First-Place Wins
+                  </p>
                   <p className="font-display mt-2 text-4xl font-light" style={{ color: C }}>
                     36/40
                   </p>
@@ -265,14 +312,16 @@ export function ProductDetail({ product }: { product: Product }) {
                   </p>
                 </div>
 
-                <div 
+                <div
                   className="rounded-2xl border p-8 backdrop-blur-sm"
-                  style={{ 
+                  style={{
                     borderColor: `color-mix(in oklab, ${C} 20%, transparent)`,
-                    background: `color-mix(in oklab, ${C} 5%, transparent)`
+                    background: `color-mix(in oklab, ${C} 5%, transparent)`,
                   }}
                 >
-                  <p className="label-mono" style={{ color: C }}>Median Composite</p>
+                  <p className="label-mono" style={{ color: C }}>
+                    Median Composite
+                  </p>
                   <p className="font-display mt-2 text-4xl font-light" style={{ color: C }}>
                     80.6
                   </p>
@@ -316,16 +365,16 @@ export function ProductDetail({ product }: { product: Product }) {
       </section>
 
       <SiteFooter />
-      
+
       {/* Access Form Modals */}
-      <MorbiusAccessForm 
-        isOpen={showAccessForm} 
-        onClose={() => setShowAccessForm(false)} 
+      <MorbiusAccessForm
+        isOpen={showAccessForm}
+        onClose={() => setShowAccessForm(false)}
         formType="individual"
       />
-      <MorbiusAccessForm 
-        isOpen={showDemoForm} 
-        onClose={() => setShowDemoForm(false)} 
+      <MorbiusAccessForm
+        isOpen={showDemoForm}
+        onClose={() => setShowDemoForm(false)}
         formType="institutional"
       />
     </main>

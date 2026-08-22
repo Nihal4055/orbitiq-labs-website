@@ -20,6 +20,25 @@ export interface ProductFeature {
   chips: string[];
 }
 
+/**
+ * A single stage of a product's autonomous research loop. Rendered as a
+ * sequential process (see DiscoveryLoop), not as a standalone feature card —
+ * each stage is a step one system takes, not a separate tool.
+ */
+export interface DiscoveryStage {
+  key: string;
+  verb: string; // Ingest / Remember / Reason / Discover / Publish
+  title: string;
+  body: string;
+  /** Optional second paragraph, for stages that carry the core claim. */
+  extra?: string;
+  /** Optional agent roster — only the stage that orchestrates agents. */
+  roles?: { name: string; job: string }[];
+  chips: string[];
+  /** Marks the stage that should get the most visual weight on the page. */
+  emphasis?: boolean;
+}
+
 export interface Product {
   slug: string;
   name: string;
@@ -33,8 +52,23 @@ export interface Product {
   capabilities: string[]; // 3 quick bullets for showcase
   metrics: { value: string; label: string }[];
   sessions: AgentSession[];
-  features: ProductFeature[];
+  /** Flat feature list. Omit when `stages` is set — the loop replaces it. */
+  features?: ProductFeature[];
   closing: string;
+
+  /* ---- optional: positioning-led detail page ---------------------------- */
+  /** Hero H1. When set, the product name renders as an eyebrow above it. */
+  headline?: string;
+  /** Hero sub-headline paragraph, replaces tagline + body in the hero. */
+  subheadline?: string;
+  /** Overrides tagline for meta description / og:description. */
+  metaDescription?: string;
+  /** When set, the loop replaces the flat feature panel list. */
+  loopHeader?: string;
+  loopIntro?: string;
+  stages?: DiscoveryStage[];
+  /** Short positioning paragraph rendered after the loop. */
+  differentiator?: string;
 }
 
 export const PRODUCTS: Product[] = [
@@ -42,17 +76,22 @@ export const PRODUCTS: Product[] = [
     slug: "morbius",
     name: "Morbius",
     greek: "Ἐπιστήμη · Knowledge",
-    tagline: "The Scientific Operating System for Autonomous Research",
+    tagline: "An AI Co-Scientist for autonomous scientific discovery",
+    headline: "An AI Co-Scientist for Autonomous Discovery.",
+    subheadline:
+      "Morbius doesn't just summarize your literature or suggest an idea. It ingests evidence, builds lasting research memory, reasons over it, and autonomously generates and tests hypotheses — closing the loop from raw literature to verified, citable output.",
+    metaDescription:
+      "Morbius is an AI Co-Scientist that drives autonomous scientific discovery — from literature to verified, testable, publication-ready output, run end-to-end with minimal human input.",
     summary:
-      "Morbius reads your literature, builds your knowledge graph, generates hypotheses, plans experiments, and writes alongside you — every claim traceable, every step transparent.",
-    body: "Morbius doesn't just answer questions about your research — it ingests your literature, constructs a living knowledge graph, orchestrates a team of specialized agents, generates novel hypotheses, and drafts publication-ready output. All grounded in retrievable evidence.",
+      "An AI Co-Scientist that runs the research loop end-to-end: ingesting evidence, holding it in persistent memory, reasoning over it, generating and testing hypotheses, and composing verified output.",
+    body: "Morbius runs the full research loop with minimal human input — ingesting evidence, holding it in a persistent knowledge graph, orchestrating specialized agents to generate and test hypotheses, and composing findings that survive verification into publication-ready output.",
     status: "Live",
     live: true,
     colorVar: "var(--morbius)",
     capabilities: [
-      "Ingests PDFs, arXiv, journals & lab data into structured knowledge",
-      "Orchestrates 10 specialized research agents in parallel",
-      "Every answer grounded in traceable, inspectable evidence",
+      "Runs the full loop: ingest → remember → reason → discover → publish",
+      "Ten specialized agents generate, test, and audit hypotheses in parallel",
+      "Every claim traces to a source paragraph, figure, and confidence score",
     ],
     metrics: [
       { value: "10", label: "Research Agents" },
@@ -84,39 +123,84 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    features: [
+    loopHeader: "How Morbius Discovers",
+    loopIntro:
+      "Discovery is not a feature set. It is a loop — and Morbius runs every stage of it as one continuous process, carrying the output of each stage forward as the input to the next.",
+    stages: [
       {
-        title: "Literature Acquisition, Instantly Structured",
-        body: "Import from PDF, arXiv, journals, technical reports, lecture recordings, or internal documents. Morbius understands them — extracting sections, tables, figures, equations, citations, and claims into structured scientific knowledge.",
+        key: "ingest",
+        verb: "Ingest",
+        title: "Evidence in, structure out.",
+        body: "Morbius takes in PDFs, arXiv preprints, journal articles, technical reports, lecture recordings, and internal lab documents, then decomposes them. Sections, tables, figures, equations, citations, and individual claims are extracted and typed, so every later stage reasons over structured scientific evidence rather than undifferentiated text.",
         chips: ["PDF", "arXiv", "Journals", "Reports", "Lectures", "Internal docs"],
       },
       {
-        title: "A Knowledge Graph That Never Forgets",
-        body: "Every paper becomes part of a continuously expanding graph — linking authors, concepts, methods, datasets, and results. Your research memory compounds instead of resetting each session.",
-        chips: ["Authors", "Concepts", "Methods", "Datasets", "Results"],
+        key: "remember",
+        verb: "Remember",
+        title: "Research memory that compounds instead of resetting.",
+        body: "Each ingested source is written into a persistent graph linking authors, concepts, methods, datasets, and results. This is the Co-Scientist's long-term memory: evidence read months ago remains available and, more importantly, remains connected. Context accumulates across sessions rather than being rebuilt from scratch in every conversation.",
+        chips: ["Authors", "Concepts", "Methods", "Datasets", "Results", "Persistent"],
       },
       {
-        title: "Ask Anything. Get Evidence, Not Guesses.",
-        body: "Every Morbius answer is grounded in retrievable evidence — inspect the source paragraph, the figure, the citation, the confidence score.",
-        chips: ["Source paragraph", "Figure", "Citation", "Confidence score"],
+        key: "reason",
+        verb: "Reason",
+        title: "Grounded inference — the substrate, not the destination.",
+        body: "Questions resolve against the graph, and every claim returns with its provenance: the source paragraph, the figure it came from, the citation, a confidence score. This stage exists to make the next one trustworthy. Hypotheses are only worth testing if the evidence they rest on can be inspected and challenged.",
+        chips: ["Source paragraph", "Figure", "Citation", "Confidence score", "Provenance"],
       },
       {
-        title: "A Team of Agents, Not a Single Chatbot",
-        body: "Morbius orchestrates specialized agents working together, the way a real research team would.",
-        chips: ["Reviewer", "Planner", "Writer", "Statistician", "Hypothesis", "Auditor"],
+        key: "discover",
+        verb: "Discover",
+        title: "Where the loop closes — hypotheses generated, then tested.",
+        emphasis: true,
+        body: "This is the core engine. Morbius runs ten specialized agents in parallel rather than prompting a single model repeatedly. Together they read the graph for structural weaknesses — where the literature contradicts itself, where a method has never been applied to the dataset that would test it, where a conclusion rests on one unreplicated study — and turn each into a candidate hypothesis with a design capable of falsifying it.",
+        extra:
+          "The loop advances without a human prompting each step. Hypotheses that fail the audit stage are discarded by Morbius rather than surfaced for a researcher to catch, so what reaches you has already survived internal scrutiny: a testable prediction, the experiment or analysis that would discriminate it from the alternatives, and the evidence trail behind both.",
+        roles: [
+          {
+            name: "Reviewer",
+            job: "Audits the evidence base for gaps, weak support, and contradiction.",
+          },
+          {
+            name: "Hypothesis",
+            job: "Proposes candidate explanations for what the graph leaves unresolved.",
+          },
+          {
+            name: "Planner",
+            job: "Designs the experiment or analysis that would discriminate between them.",
+          },
+          {
+            name: "Statistician",
+            job: "Specifies power, controls, and the result that would falsify the claim.",
+          },
+          {
+            name: "Writer",
+            job: "Renders reasoning and outcomes into reviewable scientific prose.",
+          },
+          {
+            name: "Auditor",
+            job: "Checks every surviving conclusion back against its source evidence.",
+          },
+        ],
+        chips: [
+          "Gap detected",
+          "Contradiction",
+          "Novel hypothesis",
+          "Testable prediction",
+          "Falsification check",
+        ],
       },
       {
-        title: "From Question to Hypothesis, Autonomously",
-        body: "Morbius identifies knowledge gaps, flags inconsistencies across your literature, and proposes novel hypotheses and experiments worth pursuing.",
-        chips: ["Gap detected", "Contradiction", "Novel hypothesis", "Testable prediction"],
-      },
-      {
-        title: "Publication Studio",
-        body: "Your research becomes conference slides, a poster, an executive summary, teaching material, or a full manuscript draft — all grounded in your evidence graph.",
-        chips: ["Slides", "Poster", "Summary", "Manuscript", "Podcast"],
+        key: "publish",
+        verb: "Publish",
+        title: "Verified findings, rendered publication-ready.",
+        body: "Findings that survive verification are composed into output: a manuscript draft, conference slides, a poster, an executive summary, teaching material. Citations resolve back to the graph entries that produced them, so every claim and figure in the export remains traceable to the evidence it came from.",
+        chips: ["Manuscript", "Slides", "Poster", "Summary", "Teaching material"],
       },
     ],
-    closing: "Your literature review shouldn't take three weeks.",
+    differentiator:
+      "Most AI research tools stop at one part of this loop — summarizing papers, or answering questions, or proposing an idea for a human to validate. Morbius is built to run the entire loop autonomously, closing the gap between a plausible answer and a verified one. That gap — not raw language ability — is what separates AI-assisted research from AI-driven discovery.",
+    closing: "Discovery is a loop. Morbius runs all of it.",
   },
   {
     slug: "prometheus",
