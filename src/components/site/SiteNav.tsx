@@ -157,6 +157,7 @@ export function SiteNav() {
         </ul>
 
         <div className="flex items-center gap-3">
+          {/* Temporarily disabled - modal positioning issues on mobile
           <Button 
             variant="solid" 
             size="sm" 
@@ -165,6 +166,7 @@ export function SiteNav() {
           >
             Try Morbius Desktop
           </Button>
+          */}
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
@@ -188,6 +190,7 @@ export function SiteNav() {
               </li>
             ))}
           </ul>
+          {/* Temporarily disabled - modal positioning issues on mobile
           <div className="mt-6 border-t border-border/40 pt-6">
             <Button 
               variant="solid" 
@@ -201,6 +204,7 @@ export function SiteNav() {
               Try Morbius Desktop
             </Button>
           </div>
+          */}
         </div>
       )}
 
